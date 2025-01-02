@@ -59,7 +59,7 @@ async function transcribeGoogleSpeechToText(chunked = false) {
 
     const [response] = await GoogleSpeechToText.recognize({
         audio: {
-            content: fs.readFileSync(path.join(__dirname, "../audio/chunked/chunk000.mp3")).toString("base64")
+            uri: "gs://audio-sttbucket/Cut Sample Audio.mp3"
         },
         config: {
             encoding: "MP3",
