@@ -84,7 +84,7 @@ async function transcribeAmazonTranscribe(chunked = false) {
     if (chunked) {
         for (let i = 0; i < 5; i++) {
             const command = new StartTranscriptionJobCommand({
-                TranscriptionJobName: `sample-transcribe-job-${i}`,
+                TranscriptionJobName: `transcribe-job-${i}`,
                 Media: {
                     MediaFileUri: `s3://stt-audio-bucket/chunked/chunk00${i}.mp3`
                 },
