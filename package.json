@@ -17,5 +17,10 @@
     "tsup": "^8.3.5",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.19.0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-transcribe": "^3.716.0",
+    "@google-cloud/speech": "^6.7.0",
+    "openai": "^4.77.0"
   }
 }
