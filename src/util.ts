@@ -15,7 +15,7 @@ export function compareTexts(textA: string, textB: string) {
     // remove all punctuations and convert to lowercase
     function removePunctuation(text: string) {
         return text
-            .replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, "")
+            .replace(/[.,/#!$%^&*;:'"{}=\-_`~()]/g, "")
             .replace(/\s{2,}/g, " ")
             .toLowerCase();
     }
