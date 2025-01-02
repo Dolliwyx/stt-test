@@ -30,6 +30,7 @@ async function transcribeGoogleSpeechToText(chunked = false) {
         let txt = "";
 
         for (let i = 0; i < 5; i++) {
+            const stopwatch2 = new Stopwatch();
             const [response] = await GoogleSpeechToText.recognize({
                 audio: {
                     content: fs.readFileSync(path.join(__dirname, `../audio/chunked/chunk00${i}.mp3`)).toString("base64")
@@ -45,11 +46,15 @@ async function transcribeGoogleSpeechToText(chunked = false) {
             if (!response.results || !response.results.length) return console.log("Google Speech to Text: No results");
 
             const transcription = response.results.map((result) => result.alternatives![0].transcript).join("\n");
-            console.log(`Google Speech to Text: Transcription #${i+1} complete`);
+            console.log(`Google Speech to Text: Transcription #${i + 1} complete (Took: ${stopwatch2.stop()})`);
             txt += transcription + "\n";
         }
 
-        return console.log(`----------- Google Speech to Text: Transcription complete (Took: ${stopwatch.stop() } | Accuracy: ${compareTexts(txt, REFERENCE_TEXT)})\n\n`, txt, "-----------");
+        return console.log(
+            `----------- Google Speech to Text: Transcription complete (Took: ${stopwatch.stop()} | Accuracy: ${compareTexts(txt, REFERENCE_TEXT)})\n\n`,
+            txt,
+            "-----------"
+        );
     }
 
     const [response] = await GoogleSpeechToText.recognize({
@@ -68,7 +73,11 @@ async function transcribeGoogleSpeechToText(chunked = false) {
 
     const transcription = response.results.map((result) => result.alternatives![0].transcript).join("\n");
 
-    return console.log(`----------- Google Speech to Text: Transcription complete (Took: ${stopwatch.stop()} | Accuracy: ${compareTexts(transcription, REFERENCE_TEXT)})\n\n`, transcription, "-----------");
+    return console.log(
+        `----------- Google Speech to Text: Transcription complete (Took: ${stopwatch.stop()} | Accuracy: ${compareTexts(transcription, REFERENCE_TEXT)})\n\n`,
+        transcription,
+        "-----------"
+    );
 }
 
 async function transcribeAmazonTranscribe(chunked = false) {
@@ -118,36 +127,44 @@ async function transcribeOpenAIWhisper(chunked = false) {
     const stopwatch = new Stopwatch();
 
     if (chunked) {
-        let txt = ""; 
+        let txt = "";
 
         for (let i = 0; i < 5; i++) {
+            const stopwatch2 = new Stopwatch();
             const transcription = await OpenAIWhisper.audio.transcriptions.create({
                 file: fs.createReadStream(path.join(__dirname, `../audio/chunked/chunk00${i}.mp3`)),
                 model: "whisper-1"
             });
 
-            console.log(`OpenAI Whisper: Transcription #${i+1} complete`);
+            console.log(`OpenAI Whisper: Transcription #${i + 1} complete (Took: ${stopwatch2.stop()})`);
             txt += transcription.text + "\n";
         }
-        
-        return console.log(`----------- OpenAI Whisper: Transcription complete (Took: ${stopwatch.stop()} | Accuracy: ${compareTexts(txt, REFERENCE_TEXT)})\n\n`, txt, "-----------");
-    }
 
+        return console.log(
+            `----------- OpenAI Whisper: Transcription complete (Took: ${stopwatch.stop()} | Accuracy: ${compareTexts(txt, REFERENCE_TEXT)})\n\n`,
+            txt,
+            "-----------"
+        );
+    }
 
     const transcription = await OpenAIWhisper.audio.transcriptions.create({
         file: fs.createReadStream(path.join(__dirname, "../audio/cut-sample-audio.mp3")),
         model: "whisper-1"
     });
 
-    console.log(`----------- OpenAI Whisper: Transcription complete (Took: ${stopwatch.stop()} | Accuracy: ${compareTexts(transcription.text, REFERENCE_TEXT)})\n`, transcription.text, "-----------");
+    console.log(
+        `----------- OpenAI Whisper: Transcription complete (Took: ${stopwatch.stop()} | Accuracy: ${compareTexts(transcription.text, REFERENCE_TEXT)})\n`,
+        transcription.text,
+        "-----------"
+    );
 }
 
 async function main() {
     // console.log(process.env);
     // run all tests here
     console.log("Testing Speech to Text services (Whole)...");
-    await transcribeAmazonTranscribe()
-    await transcribeOpenAIWhisper()
+    await transcribeAmazonTranscribe();
+    await transcribeOpenAIWhisper();
 
     console.log("Testing Speech to Text services (Chunked)...");
     await transcribeAmazonTranscribe(true);
