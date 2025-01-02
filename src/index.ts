@@ -57,7 +57,7 @@ async function transcribeGoogleSpeechToText(chunked = false) {
         );
     }
 
-    const [response] = await GoogleSpeechToText.recognize({
+    const [operation] = await GoogleSpeechToText.longRunningRecognize({
         audio: {
             uri: "gs://audio-sttbucket/taglish-audio.mp3"
         },
@@ -68,6 +68,8 @@ async function transcribeGoogleSpeechToText(chunked = false) {
             languageCode: "en-PH"
         }
     });
+
+    const [response] = await operation.promise();
 
     if (!response.results || !response.results.length) return console.log("Google Speech to Text: No results");
 
