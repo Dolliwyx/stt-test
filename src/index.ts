@@ -107,7 +107,7 @@ async function transcribeAmazonTranscribe(chunked = false) {
     const command = new StartTranscriptionJobCommand({
         TranscriptionJobName: "sample-transcribe-job",
         Media: {
-            MediaFileUri: "s3://stt-audio-bucket/Cut Sample Audio.mp3"
+            MediaFileUri: "s3://stt-audio-bucket/taglish-audio.mp3"
         },
         IdentifyLanguage: true
     });
@@ -148,7 +148,7 @@ async function transcribeOpenAIWhisper(chunked = false) {
     }
 
     const transcription = await OpenAIWhisper.audio.transcriptions.create({
-        file: fs.createReadStream(path.join(__dirname, "../audio/cut-sample-audio.mp3")),
+        file: fs.createReadStream(path.join(__dirname, "../audio/taglish-audio.mp3")),
         model: "whisper-1"
     });
 
