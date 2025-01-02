@@ -164,6 +164,7 @@ async function main() {
     // run all tests here
     console.log("Testing Speech to Text services (Whole)...");
     await transcribeAmazonTranscribe();
+    await transcribeGoogleSpeechToText();
     await transcribeOpenAIWhisper();
 
     console.log("Testing Speech to Text services (Chunked)...");
